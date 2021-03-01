@@ -35,19 +35,7 @@
     - utter_goodbye
     - export
 
-* greet
-    - utter_greet
-* restaurant_search{"cuisine": "chinese", "location": "delhi"}
-    - slot{"cuisine": "chinese"}
-    - slot{"location": "delhi"}
-    - action_search_restaurants
-    - slot{"location": "delhi"}
-* mail_request{"email": "email"}
-    - slot{"email": "email"}
-    - action_send_mail
-* affirm
-    - utter_goodbye
-    - export
+
 
 <!-- ## complete path 2
 * greet
