@@ -4,11 +4,13 @@ intents:
 - greet
 - goodbye
 - stop
+- mail_request
 entities:
 - cuisine
 - location
 - price
 - people
+- email
 slots:
   cuisine:
     type: text

@@ -33,18 +33,21 @@ class ActionSearchRestaurants(Action):
 
 	def run(self, dispatcher, tracker, domain):
 		loc = tracker.get_slot('location')
-		cuisine = tracker.get_slot('cuisine')
-		results = RestaurantSearch(city=loc,cuisine=cuisine)
-		response=""
-		if results.shape[0] == 0:
-			response= "no results"
+		if loc.lower() not in WeOperate:
+			response= "Sorry, not serving this Location"
 		else:
-			for restaurant in RestaurantSearch(loc,cuisine).iloc[:5].iterrows():
-				restaurant = restaurant[1]
-				response=response + F"Found {restaurant['Restaurant Name']} in {restaurant['Address']} rated {restaurant['Address']} with avg cost {restaurant['Average Cost for two']} \n\n"
-				
-		dispatcher.utter_message("-----"+response)
-		# SlotSet('results',results)
+			cuisine = tracker.get_slot('cuisine')
+			results = RestaurantSearch(city=loc,cuisine=cuisine)
+			response=""
+			if results.shape[0] == 0:
+				response= "no results"
+			else:
+				for restaurant in RestaurantSearch(loc,cuisine).iloc[:5].iterrows():
+					restaurant = restaurant[1]
+					response=response + F"Found {restaurant['Restaurant Name']} in {restaurant['Address']} rated {restaurant['Address']} with avg cost {restaurant['Average Cost for two']} \n\n"
+					
+			dispatcher.utter_message("-----"+response)
+			# SlotSet('results',results)
 		return [SlotSet('location',loc)]
 
 class ActionSendMail(Action):
