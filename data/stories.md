@@ -1,4 +1,18 @@
-## complete path
+## location specified
+* greet
+    - utter_greet
+* restaurant_search{"location": "delhi"}
+    - slot{"location": "delhi"}
+    - utter_ask_cuisine
+* restaurant_search{"cuisine": "chinese"}
+    - slot{"cuisine": "chinese"}
+    - action_search_restaurants
+* affirm
+    - utter_goodbye
+    - export
+
+
+<!-- ## complete path
 * greet
     - utter_greet
 * restaurant_search
@@ -13,18 +27,7 @@
     - utter_goodbye
     - export
 
-## location specified
-* greet
-    - utter_greet
-* restaurant_search{"location": "delhi"}
-    - slot{"location": "delhi"}
-    - utter_ask_cuisine
-* restaurant_search{"cuisine": "chinese"}
-    - slot{"cuisine": "chinese"}
-    - action_search_restaurants
-* affirm
-    - utter_goodbye
-    - export
+
 
 ## complete path 2
 * greet
@@ -128,4 +131,4 @@
     - action_search_restaurants
     - slot{"location": "delhi"}
 * affirm
-    - utter_goodbye
+    - utter_goodbye -->
