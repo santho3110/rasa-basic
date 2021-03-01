@@ -7,6 +7,7 @@
 * restaurant_search{"cuisine": "chinese"}
     - slot{"cuisine": "chinese"}
     - action_search_restaurants
+    - utter_ask_email
 * mail_request{"email": "email"}
     - slot{"email": "email"}
     - action_send_mail
@@ -15,7 +16,7 @@
     - export
 
 
-<!-- ## complete path
+## complete path
 * greet
     - utter_greet
 * restaurant_search
@@ -26,13 +27,17 @@
 * restaurant_search{"cuisine": "chinese"}
     - slot{"cuisine": "chinese"}
     - action_search_restaurants
-    - slot{"location": "delhi"}
+    - utter_ask_email
+* mail_request{"email": "email"}
+    - slot{"email": "email"}
+    - action_send_mail
+* affirm
     - utter_goodbye
     - export
 
 
 
-## complete path 2
+<!-- ## complete path 2
 * greet
     - utter_greet
 * restaurant_search
