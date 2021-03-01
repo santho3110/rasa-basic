@@ -5,13 +5,18 @@
 - indeed
 - that's right
 - ok
+- okay
 - great
 - right, thank you
 - correct
 - great choice
+- sure
+- Hallo
+- Good day
 - sounds really good
 - thanks
 - thanks
+- sure, why not!
 
 ## intent:goodbye
 - bye
@@ -19,9 +24,11 @@
 - good bye
 - stop
 - end
+- ciao
 - farewell
 - Bye bye
 - have a good one
+- see you again
 
 ## intent:greet
 - hey
@@ -33,12 +40,13 @@
 - good evening
 - dear sir
 - hi
-- hi
+- hii
 - hello
 
 ## intent:restaurant_search
 - i'm looking for a place to eat
 - I want to grab lunch
+- find some restaurant 
 - I am searching for a dinner spot
 - I am looking for some restaurants in [Delhi](location).
 - I am looking for some restaurants in [Bangalore](location)
@@ -49,7 +57,7 @@
 - search for restaurants
 - anywhere in the [west](location)
 - I am looking for [asian fusion](cuisine) food
-- I am looking a restaurant in [294328](location)
+- I am looking a restaurant in [Chennai](location)
 - in [Gurgaon](location)
 - [South Indian](cuisine)
 - [North Indian](cuisine)
@@ -76,11 +84,20 @@
 - please find me a restaurant in [ahmedabad](location)
 - please show me a few [italian](cuisine) restaurants in [bangalore](location)
 
+
+## intent:request_mail
+  examples: |
+    - My email is [example@example.com](email)
+    - [random@example.com](email)
+    - Please send it to [anything@example.com](email)
+    - Email is [something@example.com](email)
+
 ## synonym:4
 - four
 
 ## synonym:Delhi
 - New Delhi
+- Dilli
 
 ## synonym:bangalore
 - Bengaluru
@@ -92,10 +109,12 @@
 
 ## synonym:mid
 - moderate
+- avg
 
 ## synonym:vegetarian
 - veggie
 - vegg
+- veg
 
 ## regex:greet
 - hey[^\s]*

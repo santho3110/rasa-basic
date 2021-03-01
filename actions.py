@@ -4,23 +4,34 @@ from __future__ import unicode_literals
 
 from rasa_sdk import Action
 from rasa_sdk.events import SlotSet
+
+import base64 
+import smtplib, ssl
 import pandas as pd
-import json
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 ZomatoData = pd.read_csv('zomato.csv')
 ZomatoData = ZomatoData.drop_duplicates().reset_index(drop=True)
-WeOperate = ['New Delhi', 'Gurgaon', 'Noida', 'Faridabad', 'Allahabad', 'Bhubaneshwar', 'Mangalore', 'Mumbai', 'Ranchi', 'Patna', 'Mysore', 'Aurangabad', 'Amritsar', 'Puducherry', 'Varanasi', 'Nagpur', 'Vadodara', 'Dehradun', 'Vizag', 'Agra', 'Ludhiana', 'Kanpur', 'Lucknow', 'Surat', 'Kochi', 'Indore', 'Ahmedabad', 'Coimbatore', 'Chennai', 'Guwahati', 'Jaipur', 'Hyderabad', 'Bangalore', 'Nashik', 'Pune', 'Kolkata', 'Bhopal', 'Goa', 'Chandigarh', 'Ghaziabad', 'Ooty', 'Gangtok', 'Shimla']
+WeOperate = WeOperate = {city.lower() for city in ZomatoData.City.unique()}
 
-def RestaurantSearch(City,Cuisine):
-	TEMP = ZomatoData[(ZomatoData['Cuisines'].apply(lambda x: Cuisine.lower() in x.lower())) & (ZomatoData['City'].apply(lambda x: City.lower() in x.lower()))]
-	return TEMP[['Restaurant Name','Address','Average Cost for two','Aggregate rating']]
+def RestaurantSearch(city, cuisine, budget=None):
+    TEMP = ZomatoData[ZomatoData.City.str.contains(city, case=False) & #Filter by city
+                      ZomatoData.Cuisines.str.contains(cuisine, case=False)] #Filter by cuisine
+    if len(TEMP):
+        TEMP = TEMP[['Restaurant Name','Address','Average Cost for two','Aggregate rating']]
+        # Filter by budget
+        # Sort by 'Aggregate rating'
+        TEMP = TEMP.sort_values(by='Aggregate rating', ascending=False)
+        # Return top 5
+        return TEMP.head(5)
+    return 
 
 class ActionSearchRestaurants(Action):
 	def name(self):
 		return 'action_search_restaurants'
 
 	def run(self, dispatcher, tracker, domain):
-		#config={ "user_key":"f4924dc9ad672ee8c4f8c84743301af5"}
 		loc = tracker.get_slot('location')
 		cuisine = tracker.get_slot('cuisine')
 		results = RestaurantSearch(City=loc,Cuisine=cuisine)
@@ -33,6 +44,7 @@ class ActionSearchRestaurants(Action):
 				response=response + F"Found {restaurant['Restaurant Name']} in {restaurant['Address']} rated {restaurant['Address']} with avg cost {restaurant['Average Cost for two']} \n\n"
 				
 		dispatcher.utter_message("-----"+response)
+		SlotSet('results',results)
 		return [SlotSet('location',loc)]
 
 class ActionSendMail(Action):
@@ -40,6 +52,54 @@ class ActionSendMail(Action):
 		return 'action_send_mail'
 
 	def run(self, dispatcher, tracker, domain):
-		MailID = tracker.get_slot('mail_id')
-		sendmail(MailID,response)
-		return [SlotSet('mail_id',MailID)]
+		MailID = tracker.get_slot('email')
+		results = tracker.get_slot('results')
+		sendmail(MailID, results)
+		dispatcher.utter_message("----Email has been sent----")
+		return [SlotSet('email',MailID)]
+
+
+def sendmail(mail_id, content):
+
+    sender_email = "sandy.mymessage@gmail.com"
+    receiver_email = mail_id
+    passcode_bytes = base64.b64decode('U3kjQSZpNFU='.encode("ascii")) 
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Restaurant Search"
+    message["From"] = sender_email
+    message["To"] = receiver_email
+
+    # Create the plain-text and HTML version of your message
+    text = """\
+    Hi,
+    Hope you are doing Great!
+    We thoungh these Restaurants will suit for you.:
+    Thanks for using our service! Your reviews are valuable."""
+    html = """\
+    <html>
+      <body>
+        <p>Hi,<br>
+           Hope you are doing Great!<br>
+        </p>
+        <h3>We thoungh these Restaurants will suit for you.
+        <h3>"""+content.to_html(index=False)+"""</body>
+        <p>Thanks for using our service! <br>
+        Your reviews are Invaluable.</p>
+    </html>"""
+
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(text, "plain")
+    part2 = MIMEText(html, "html")
+
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
+    message.attach(part2)
+    
+    # Create secure connection with server and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, passcode_bytes.decode("ascii"))
+        server.sendmail(
+            sender_email, receiver_email, message.as_string())

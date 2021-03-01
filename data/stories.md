@@ -7,6 +7,9 @@
 * restaurant_search{"cuisine": "chinese"}
     - slot{"cuisine": "chinese"}
     - action_search_restaurants
+* mail_request{"email": "email"}
+    - slot{"email": "email"}
+    - action_send_mail
 * affirm
     - utter_goodbye
     - export
