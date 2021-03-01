@@ -85,12 +85,12 @@
 - please show me a few [italian](cuisine) restaurants in [bangalore](location)
 
 
-## intent:request_mail
-  examples: |
-    - My email is [example@example.com](email)
-    - [random@example.com](email)
-    - Please send it to [anything@example.com](email)
-    - Email is [something@example.com](email)
+## intent:mail_request
+- My email is [example@example.com](email)
+- [random@example.com](email)
+- Please send it to [anything@example.com](email)
+- Email is [something@example.com](email)
+- This is my Email ID [something@example.com](email)
 
 ## synonym:4
 - four

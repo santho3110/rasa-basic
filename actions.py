@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 
 ZomatoData = pd.read_csv('zomato.csv')
 ZomatoData = ZomatoData.drop_duplicates().reset_index(drop=True)
-WeOperate = WeOperate = {city.lower() for city in ZomatoData.City.unique()}
+WeOperate = {city.lower() for city in ZomatoData.City.unique()}
 
 def RestaurantSearch(city, cuisine, budget=None):
     TEMP = ZomatoData[ZomatoData.City.str.contains(city, case=False) & #Filter by city
@@ -34,7 +34,7 @@ class ActionSearchRestaurants(Action):
 	def run(self, dispatcher, tracker, domain):
 		loc = tracker.get_slot('location')
 		cuisine = tracker.get_slot('cuisine')
-		results = RestaurantSearch(City=loc,Cuisine=cuisine)
+		results = RestaurantSearch(city=loc,cuisine=cuisine)
 		response=""
 		if results.shape[0] == 0:
 			response= "no results"
