@@ -45,10 +45,16 @@
 * restaurant_search{"location": "delhi"}
     - slot{"location": "delhi"}
     - utter_ask_cuisine
-* restaurant_search{"cuisine": "North Indian"}
-    - slot{"cuisine": "North Indian"}
+* restaurant_search{"cuisine": "chinese"}
+    - slot{"cuisine": "chinese"}
     - action_search_restaurants
+    - utter_ask_email
+* mail_request{"email": "email"}
+    - slot{"email": "email"}
+    - action_send_mail
+* affirm
     - utter_goodbye
+    - export
 
 ## complete path 3
 * greet
